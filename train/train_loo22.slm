@@ -1,0 +1,39 @@
+#!/bin/bash
+#SBATCH -J rfv1
+#SBATCH -o /scratch/UUUU/rfv1.o%j
+#SBATCH -N 1
+#SBATCH -n 1
+##SBATCH --exclusive
+#SBATCH -p map_well
+#SBATCH --mem=10000
+#SBATCH -t 12:00:00 
+username=UUUU
+
+module purge
+module load Python/3.7.6-foss-2019a
+module load Pillow/5.3.0-foss-2019a-Python-3.7.6
+module load GEOS/3.7.2-foss-2019a-Python-3.7.6
+module load netcdf4-python/1.4.1-foss-2019a-Python-3.7.6 ecCodes/2.15.0-foss-2019a
+
+cd /home/${username}/rf/fv3_2022rerun/train
+
+whichtime=TTTT #all times
+whichvar=SSSS #all severe
+
+
+
+
+  mkdir /scratch/${username}/rf_loo_22
+  mkdir /scratch/${username}/rf_loo_22/itm${whichtime}_isev${whichvar}
+
+
+
+whichcase=CCCC
+
+  outdir=/scratch/${username}/rf_loo_22/itm${whichtime}_isev${whichvar}/${whichcase}
+  mkdir ${outdir}
+
+  outfile=${outdir}/train_rf.model
+  python3 train_rf22.py ${outfile} ${whichcase} ${whichtime} ${whichvar} ${username} > ${outdir}/python.rf999.output
+
+
